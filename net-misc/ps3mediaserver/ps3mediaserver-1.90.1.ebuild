@@ -87,7 +87,7 @@ src_install() {
 pkg_postinst() {
 	enewgroup pms
 	enewuser pms -1 -1 ${PMS_HOME}
-	fowners -r pms:pms ${PMS_HOME}
+	chown -r pms:pms ${PMS_HOME}
 
 	if [[ -z ${REPLACING_VERSIONS} ]]; then
 		ewarn "Don't forget to disable transcoding engines for software"
