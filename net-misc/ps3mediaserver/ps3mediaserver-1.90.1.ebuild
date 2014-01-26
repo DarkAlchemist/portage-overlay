@@ -4,7 +4,7 @@
 
 EAPI="5"
 
-inherit eutils
+inherit eutils user
 
 DESCRIPTION="DLNA compliant UPNP server for streaming media to Playstation 3"
 HOMEPAGE="http://code.google.com/p/ps3mediaserver"
@@ -70,12 +70,9 @@ pkg_postinst() {
 	chown -R ${PMS_USER}:${PMS_GROUP} ${PMS_HOME}
 	chown -R ${PMS_USER}:${PMS_GROUP} /var/log/${PN}
 
-
 	if [[ -z ${REPLACING_VERSIONS} ]]; then
 		ewarn "Don't forget to disable transcoding engines for software"
 		ewarn "that you don't have installed (such as having the VLC"
 		ewarn "transcoding engine enabled when you only have mencoder)."
-	elif use multiuser; then
-		ewarn "Remember to refresh the files in ~/.ps3mediaserver/"
 	fi
 }
