@@ -58,8 +58,6 @@ src_prepare() {
 }
 
 src_install() {
-	enewgroup pms
-	enewuser pms -1 -1 ${PMS_HOME}
 	dobin ${PN}
 
 	exeinto ${PMS_HOME}
@@ -84,11 +82,13 @@ src_install() {
 
 	newconfd "${FILESDIR}/${PN}.confd" ${PN}
 	newinitd "${FILESDIR}/${PN}.initd" ${PN}
-
-	fowners -r pms:pms ${PMS_HOME}
 }
 
 pkg_postinst() {
+	enewgroup pms
+	enewuser pms -1 -1 ${PMS_HOME}
+	fowners -r pms:pms ${PMS_HOME}
+
 	if [[ -z ${REPLACING_VERSIONS} ]]; then
 		ewarn "Don't forget to disable transcoding engines for software"
 		ewarn "that you don't have installed (such as having the VLC"
