@@ -19,6 +19,7 @@ DEPEND="virtual/jre
 RDEPEND="${DEPEND}"
 
 FILEBOT_HOME="/opt/FileBot"
+S="${WORKDIR}"
 
 src_unpack() {
 :
