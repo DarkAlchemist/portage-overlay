@@ -13,7 +13,7 @@ SRC_URI="mirror://sourceforge/project/ps3mediaserver/pms-${PV}-generic-linux-uni
 LICENSE="GPL-2"
 SLOT="0"
 KEYWORDS="~amd64 ~x86"
-IUSE="multiuser +transcode tsmuxer"
+IUSE="+transcode tsmuxer"
 
 DEPEND="app-arch/unzip"
 RDEPEND=">=virtual/jre-1.6.0
@@ -24,37 +24,18 @@ RDEPEND=">=virtual/jre-1.6.0
 
 S=${WORKDIR}/pms-${PV}
 PMS_HOME=/opt/${PN}
+PMS_CONF=/etc/${PN}
+
+PMS_USER="pms"
+PMS_GROUP="pms"
 
 src_prepare() {
-	if use multiuser; then
-		cat > ${PN} <<-EOF
-		#!/bin/sh
-		if [ ! -e ~/.${PN} ]; then
-			echo "Copying ${PMS_HOME} to ~/.${PN}"
-			cp -pPR "${PMS_HOME}" ~/.${PN}
-		fi
-		export PMS_HOME=\${HOME}/.${PN}
-		exec "\${PMS_HOME}/PMS.sh" "\$@"
-		EOF
-	else
-		cat > ${PN} <<-EOF
-		#!/bin/sh
-		export PMS_HOME=${PMS_HOME}
-		exec "\${PMS_HOME}/PMS.sh" "\$@"
-		EOF
-	fi
-
-	cat > ${PN}.desktop <<-EOF
-	[Desktop Entry]
-	Name=PS3 Media Server
-	GenericName=Media Server
-	Exec=${PN}
-	Icon=${PN}
-	Type=Application
-	Categories=Network;
+	cat > ${PN} <<-EOF
+	#!/bin/sh
+	export PMS_HOME=${PMS_HOME}
+	export PMS_PROFILE=${PMS_CONF}
+	exec "\${PMS_HOME}/PMS.sh" "\$@"
 	EOF
-
-	unzip -j pms.jar resources/images/icon-{32,256}.png || die
 }
 
 src_install() {
@@ -63,31 +44,32 @@ src_install() {
 	exeinto ${PMS_HOME}
 	doexe PMS.sh
 
+	dodir /var/log/${PN}/${PMS_USER}
+
 	# Fix for the newest version of PMS
-	dodir ${PMS_HOME}/.config/PMS
+	dodir ${PMS_CONF}
+	
+	insinto ${PMS_CONF}
+	doins -r *.conf
 
 	insinto ${PMS_HOME}
 	doins -r pms.jar documentation plugins renderers *.xml
-
-	insinto ${PMS_HOME}/.config/PMS
-	doins -r *.conf
 	
 	use tsmuxer && dosym /opt/tsmuxer/bin/tsMuxeR ${PMS_HOME}/linux/tsMuxeR
 	dodoc CHANGELOG.txt README.md
-
-	newicon -s 32 icon-32.png ${PN}.png
-	newicon -s 256 icon-256.png ${PN}.png
-
-	domenu ${PN}.desktop
 
 	newconfd "${FILESDIR}/${PN}.confd" ${PN}
 	newinitd "${FILESDIR}/${PN}.initd" ${PN}
 }
 
 pkg_postinst() {
-	enewgroup pms
-	enewuser pms -1 -1 ${PMS_HOME}
-	chown -R pms:pms ${PMS_HOME}
+	enewgroup ${PMS_GROUP}
+	enewuser ${PMS_USER} -1 -1 ${PMS_HOME}
+
+	# Enforce user permissions on logging directory and main directory
+	chown -R ${PMS_USER}:${PMS_GROUP} ${PMS_HOME}
+	chown -R ${PMS_USER}:${PMS_GROUP} /var/log/${PN}
+
 
 	if [[ -z ${REPLACING_VERSIONS} ]]; then
 		ewarn "Don't forget to disable transcoding engines for software"
