@@ -29,6 +29,11 @@ PMS_CONF=/etc/${PN}
 PMS_USER="pms"
 PMS_GROUP="pms"
 
+pkg_setup(){
+	enewgroup "${PMS_GROUP}"
+	enewuser "${PMS_USER}" -1 -1 "${PMS_HOME}" "${PMS_GROUP}"
+}
+
 src_prepare() {
 	cat > ${PN} <<-EOF
 	#!/bin/sh
@@ -39,36 +44,33 @@ src_prepare() {
 }
 
 src_install() {
-	dobin ${PN}
+	dobin "${PN}"
 
-	exeinto ${PMS_HOME}
+	exeinto "${PMS_HOME}"
 	doexe PMS.sh
 
-	dodir /var/log/${PN}/${PMS_USER}
+	dodir "/var/log/${PN}/${PMS_USER}"
 
 	# Fix for the newest version of PMS
-	dodir ${PMS_CONF}
+	dodir "${PMS_CONF}"
 	
-	insinto ${PMS_CONF}
+	insinto "${PMS_CONF}"
 	doins -r *.conf
 
-	insinto ${PMS_HOME}
+	insinto "${PMS_HOME}"
 	doins -r pms.jar documentation plugins renderers *.xml
 	
-	use tsmuxer && dosym /opt/tsmuxer/bin/tsMuxeR ${PMS_HOME}/linux/tsMuxeR
+	use tsmuxer && dosym /opt/tsmuxer/bin/tsMuxeR "${PMS_HOME}"/linux/tsMuxeR
 	dodoc CHANGELOG.txt README.md
 
-	newconfd "${FILESDIR}/${PN}.confd" ${PN}
-	newinitd "${FILESDIR}/${PN}.initd" ${PN}
+	newconfd "${FILESDIR}/${PN}.confd" "${PN}"
+	newinitd "${FILESDIR}/${PN}.initd" "${PN}"
 }
 
 pkg_postinst() {
-	enewgroup ${PMS_GROUP}
-	enewuser ${PMS_USER} -1 -1 ${PMS_HOME}
-
 	# Enforce user permissions on logging directory and main directory
-	chown -R ${PMS_USER}:${PMS_GROUP} ${PMS_HOME}
-	chown -R ${PMS_USER}:${PMS_GROUP} /var/log/${PN}
+	chown -R "${PMS_USER}":"${PMS_GROUP}" "${PMS_HOME}"
+	chown -R "${PMS_USER}":"${PMS_GROUP}" "/var/log/${PN}"
 
 	if [[ -z ${REPLACING_VERSIONS} ]]; then
 		ewarn "Don't forget to disable transcoding engines for software"
