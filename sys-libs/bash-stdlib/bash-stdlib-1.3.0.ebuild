@@ -4,7 +4,7 @@
 
 EAPI=5
 
-use git-2
+inherit git-2
 
 DESCRIPTION="Standard library of functions for bash"
 HOMEPAGE="https://github.com/srcshelton/stdlib.sh"
