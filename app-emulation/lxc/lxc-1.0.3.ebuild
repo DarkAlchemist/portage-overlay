@@ -20,7 +20,7 @@ RDEPEND="sys-libs/libcap"
 
 DEPEND="${RDEPEND}
 	app-text/docbook-sgml-utils
-	>=sys-kernel/linux-headers-3.10"
+	>=sys-kernel/linux-headers-3.9"
 
 # For init script, so protect with vanilla, they are not strictly
 # needed.
