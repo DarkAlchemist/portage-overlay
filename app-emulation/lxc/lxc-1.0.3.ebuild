@@ -25,6 +25,9 @@ DEPEND="${RDEPEND}
 # For init script, so protect with vanilla, they are not strictly
 # needed.
 RDEPEND="${RDEPEND}
+	dev-lua/luafilesystem
+	dev-lang/lua
+	dev-lua/alt-getopt
 	!vanilla? (
 		sys-apps/util-linux
 		app-misc/pax-utils
