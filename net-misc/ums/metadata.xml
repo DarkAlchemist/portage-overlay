@@ -1,0 +1,13 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE pkgmetadata SYSTEM "http://www.gentoo.org/dtd/metadata.dtd">
+<pkgmetadata>
+	<maintainer>
+		<email>darkalchemist@darkalchemist.co.uk</email>
+		<name>DarkAlchemist</name>
+	</maintainer>
+	<use>
+		<flag name="mencoder">Install optional dependencies for transcoding support via media-video/mplayer</flag>
+		<flag name="tsmuxer">Install optional dependencies for transcoding support via media-video/tsmuxer</flag>
+		<flag name="ffmpeg">Install optional dependencies for transcoding support via media-video/ffmpeg. Recommended as the default engine</flag>
+	</use>
+</pkgmetadata>

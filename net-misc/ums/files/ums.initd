@@ -1,0 +1,16 @@
+#!/sbin/runscript
+
+command="/usr/bin/ums"
+command_args="console"
+pidfile="${UMS_PIDFILE:-/var/run/ums.pid}"
+retry="10"
+start_stop_daemon_args="
+	--background
+	--make-pidfile
+	${UMS_USER:+--user} ${UMS_USER}
+	${UMS_GROUP:+--group} ${UMS_GROUP}
+"
+
+depend() {
+	need net
+}

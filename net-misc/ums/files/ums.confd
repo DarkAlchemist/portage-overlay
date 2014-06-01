@@ -1,0 +1,3 @@
+UMS_USER=ums
+UMS_GROUP=ums
+UMS_PIDFILE=/var/run/ums.pid
