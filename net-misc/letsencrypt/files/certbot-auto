@@ -1,0 +1,7 @@
+#!/bin/bash
+
+#
+# Run Certbot-Auto
+#
+
+XDG_DATA_HOME="/opt/letsencrypt/.local" /opt/letsencrypt/certbot-auto ${@:-}

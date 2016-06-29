@@ -1,0 +1,7 @@
+#!/bin/bash
+
+#
+# Run LetsEncrypt-Auto
+#
+
+XDG_DATA_HOME="/opt/letsencrypt/.local" /opt/letsencrypt/letsencrypt-auto ${@:-}

@@ -1,0 +1,7 @@
+#!/bin/bash
+
+#
+# Run Certbot-Auto with the --no-self-upgrade flag, which should probably be default
+#
+
+XDG_DATA_HOME="/opt/letsencrypt/.local" /opt/letsencrypt/certbot-auto --no-self-upgrade ${@:-}

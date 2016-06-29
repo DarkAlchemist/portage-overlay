@@ -1,0 +1,51 @@
+#!/bin/bash
+#
+#
+# Renew certificates based on configurations in /etc/letsencrypt/cli-conf
+#
+
+LE_CONF_ROOT="${LE_CONF_ROOT:-/etc/letsencrypt}"
+CONF_DIR="${LE_CONF_ROOT}/cli-conf"
+LETSENCRYPT=$( which letsencrypt-auto )
+# In case we want to expose via a web server
+LE_WEBROOT="${LE_WEBROOT:-/tmp/letsencrypt-auto}"
+
+usage(){
+	echo "Wrapper script to renew certificates based on configuration files for LE stored in '${CONF_DIR}'
+	-w, Create webroot location (currently set to '${LE_WEBROOT}'"
+}
+
+while getopts ":hw" opt; do
+	case "${opt:-}" in
+		h)
+			usage
+			exit
+			;;
+		w)
+			mkdir -p "${LE_WEBROOT}"
+			;;
+	esac
+done
+
+#
+# Generate a certificate only based on the configuration file supplied
+#
+[[ -d "${CONF_DIR}" ]] && {
+	for CONF in `ls -1 "${CONF_DIR}"`; do
+		${LETSENCRYPT} --no-self-upgrade certonly -c "${CONF_DIR}"/"${CONF}"
+	done
+}
+
+#
+# Generate all.pem for every live certificate
+# This is useful for applications such as haproxy which require the 
+# certificate and private key in a single file.
+#
+[[ -d "${LE_CONF_ROOT}/live" ]] && {
+	for CERT in `ls -1 "${LE_CONF_ROOT}/live"`; do
+		pushd "${LE_CONF_ROOT}"/live/"${CERT}" >/dev/null 2>&1 && {
+			cat fullchain.pem privkey.pem > all.pem
+			popd >/dev/null 2>&1
+		}
+	done
+}
