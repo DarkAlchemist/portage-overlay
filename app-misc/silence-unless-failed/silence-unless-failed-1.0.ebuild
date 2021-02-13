@@ -4,7 +4,7 @@
 
 EAPI=5
 
-inherit git-2
+inherit git-r3
 
 DESCRIPTION="silence-unless-failed script from Phusion Tools"
 HOMEPAGE="https://github.com/phusion/phusion-server-tools"
