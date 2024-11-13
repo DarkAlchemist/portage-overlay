@@ -1,13 +1,13 @@
 # Copyright 1999-2014 Gentoo Foundation
 # Distributed under the terms of the GNU General Public License v2
 
-EAPI="5"
+EAPI="8"
 
-inherit eutils
+#inherit eutils
 
 DESCRIPTION="Mirror directories to cloud storage"
-HOMEPAGE="http://www.rclone.org"
-SRC_URI="http://downloads.rclone.org/${PN}-v${PV}-linux-amd64.zip"
+HOMEPAGE="https://www.rclone.org"
+SRC_URI="https://downloads.rclone.org/v${PV}/${PN}-v${PV}-linux-amd64.zip"
 
 LICENSE="GPL-2"
 SLOT="0"

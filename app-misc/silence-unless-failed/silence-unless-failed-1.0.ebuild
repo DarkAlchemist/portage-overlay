@@ -2,9 +2,7 @@
 # Distributed under the terms of the GNU General Public License v2
 # $Header: $
 
-EAPI=5
-
-inherit git-r3
+EAPI=8
 
 DESCRIPTION="silence-unless-failed script from Phusion Tools"
 HOMEPAGE="https://github.com/phusion/phusion-server-tools"

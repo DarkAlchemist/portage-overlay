@@ -3,11 +3,11 @@
 
 EAPI="5"
 
-inherit eutils
+#inherit eutils
 
 DESCRIPTION="Mirror directories to cloud storage"
-HOMEPAGE="http://www.rclone.org"
-SRC_URI="http://downloads.rclone.org/${PN}-v${PV}-linux-amd64.zip"
+HOMEPAGE="https://www.rclone.org"
+SRC_URI="https://downloads.rclone.org/v${PV}/${PN}-v${PV}-linux-amd64.zip"
 
 LICENSE="GPL-2"
 SLOT="0"
